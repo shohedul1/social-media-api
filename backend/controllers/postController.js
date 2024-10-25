@@ -9,16 +9,14 @@ export const createPost = async (req, res) => {
         const userId = req.user.userId;
         const { content } = req.body;
 
-        const file = req.file;
-        let mediaUrl = null;
-        let mediaType = null;
-
-        if (file) {
-            mediaUrl = file.path; // Get the Cloudinary URL directly from req.file
-            mediaType = file.mimetype.startsWith('video/') ? 'video' : 'image';
+        console.log('File:', req.file); // Check if file is being received
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        // Create a new post
+        const mediaUrl = req.file.path;
+        const mediaType = req.file.mimetype.startsWith('video/') ? 'video' : 'image';
+
         const newPost = new Post({
             user: userId,
             content,
@@ -30,13 +28,13 @@ export const createPost = async (req, res) => {
         });
 
         await newPost.save();
-        return response(res, 201, 'Post created successfully', newPost);
-
+        return res.status(201).json({ message: 'Post created successfully', newPost });
     } catch (error) {
-        console.log('Error creating post:', error);
-        return response(res, 500, 'Internal server error', error.message);
+        console.error('Error creating post:', error);
+        return res.status(500).json({ message: 'Internal server error', error: error.message });
     }
 };
+
 
 //get all posts
 export const getAllPosts = async (req, res) => {
