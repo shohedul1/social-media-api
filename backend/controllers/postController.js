@@ -2,21 +2,22 @@ import Post from "../model/Post.js";
 import Story from "../model/story.js";
 import response from "../utils/responceHandler.js";
 
-
 //crate post
 export const createPost = async (req, res) => {
     try {
         const userId = req.user.userId;
         const { content } = req.body;
 
-        console.log('File:', req.file); // Check if file is being received
-        if (!req.file) {
-            return res.status(400).json({ message: 'No file uploaded' });
+        const file = req.file;
+        let mediaUrl = null;
+        let mediaType = null;
+
+        if (file) {
+            mediaUrl = file.path; // Get the Cloudinary URL directly from req.file
+            mediaType = file.mimetype.startsWith('video/') ? 'video' : 'image';
         }
 
-        const mediaUrl = req.file.path;
-        const mediaType = req.file.mimetype.startsWith('video/') ? 'video' : 'image';
-
+        // Create a new post
         const newPost = new Post({
             user: userId,
             content,
@@ -28,12 +29,13 @@ export const createPost = async (req, res) => {
         });
 
         await newPost.save();
-        return res.status(201).json({ message: 'Post created successfully', newPost });
+        return response(res, 201, 'Post created successfully', newPost);
+
     } catch (error) {
-        console.error('Error creating post:', error);
-        return res.status(500).json({ message: 'Internal server error', error: error.message });
+        console.log('Error creating post:', error);
+        return response(res, 500, 'Internal server error', error.message);
     }
-};
+}
 
 
 //get all posts

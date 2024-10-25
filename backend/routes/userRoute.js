@@ -29,11 +29,11 @@ router.put('/bio/:userId', authMiddleware, createOrUpdateUserBio)
 
 
 // update user profile
-router.put('/profile/:userId', authMiddleware, upload.single('profilePicture'), updateUserProfile)
+router.put('/profile/:userId', authMiddleware, updateUserProfile)
 
 
 // update user cover
-router.put('/profile/cover-photo/:userId', authMiddleware, upload.single('coverPhoto'), updateCoverPhoto)
+router.put('/profile/cover-photo/:userId', authMiddleware, updateCoverPhoto)
 
 
 
