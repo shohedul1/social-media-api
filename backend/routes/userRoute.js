@@ -17,7 +17,7 @@ router.get('/friend-request', authMiddleware, getAllFriendsRequest);
 //get all friends for request
 router.get('/user-to-request', authMiddleware, getAllUserForRequest);
 //get all mutual friends 
-router.get('/mutual-friends/:userId', authMiddleware, getAllMutualFriends)
+router.get('/mutual-friends:userId', authMiddleware, getAllMutualFriends)
 //get all users fror search 
 router.get('/', authMiddleware, getAllUser);
 //get all users fror search 
@@ -29,11 +29,11 @@ router.put('/bio/:userId', authMiddleware, createOrUpdateUserBio)
 
 
 // update user profile
-router.put('/profile/:userId', authMiddleware, updateUserProfile)
+router.put('/profile/:userId', authMiddleware, upload.single('profilePicture'), updateUserProfile)
 
 
 // update user cover
-router.put('/profile/cover-photo/:userId', authMiddleware, updateCoverPhoto)
+router.put('/profile/cover-photo/:userId', authMiddleware, upload.single('coverPhoto'), updateCoverPhoto)
 
 
 

@@ -19,7 +19,7 @@ router.post('/posts/comments/:postId', authMiddleware, addCommentToPost);
 //user share post route
 router.post('/posts/share/:postId', authMiddleware, sharePost)
 //create story
-router.post('/story', authMiddleware, createStory);
+router.post('/story', authMiddleware,upload.single('media'), createStory);
 //get all story
 router.get('/story', authMiddleware, getAllStory)
 
